@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", sans-serif;
+        color: white;
+      }
+      body {
+        height: 100vh;
+        background-image: url("bg.jpeg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        text-align: center;
+        overflow-y: hidden;
+      }
+      #display-txt {
+        margin-top: 22vh;
+        font-size: 8vh;
+        font-weight: 700;
+        background: linear-gradient(
+          to right,
+          blue,
+          rgb(240, 47, 166),
+          blue
+        ); /* Gradient background */
+        background-clip: text;
+        -webkit-background-clip: text; /* Clip background to text */
+        -webkit-text-fill-color: transparent;
+      }
+      .search-box {
+        margin-top: 5vh;
+      }
+      #longurl {
+        background: rgb(16, 15, 15);
+        width: 37%;
+        height: 8vh;
+        outline: none;
+        border: 3px solid rgb(77, 77, 180);
+        border-radius: 6vh;
+        position: absolute;
+        left: 29vw;
+        padding-left: 5vh;
+        font-size: 2vh;
+      }
+
+      input:-webkit-autofill,
+      input:-webkit-autofill:hover,
+      input:-webkit-autofill:focus,
+      input:-webkit-autofill:active {
+        -webkit-text-fill-color: white;
+        -webkit-box-shadow: 0 0 0 30px rgb(16, 15, 15) inset !important;
+      }
+      .btnSearch {
+        width: 9vw;
+        font-size: 2vh;
+        background: rgb(33, 37, 241);
+        margin: 8px;
+        height: 6vh;
+        outline: none;
+        border: none;
+        border-radius: 6vh;
+        position: absolute;
+        left: 58.5vw;
+      }
+      input {
+        caret-color: rgb(244, 9, 162);
+      }
+      input::placeholder {
+        color: rgb(161, 155, 155);
+      }
+      .url-cont {
+        background: rgb(16, 15, 15);
+        width: 37%;
+        height: 5.5vh;
+        outline: none;
+        border: 3px solid rgb(77, 77, 180);
+        border-radius: 6vh;
+        margin-top: 13vh;
+        position: absolute;
+        left: 29vw;
+        padding-left: 5vh;
+        text-align: left;
+        padding-top: 2.5vh;
+      }
+      #cpyBtn {
+        margin-top: 14vh;
+      }
+      span {
+        color: rgb(161, 155, 155);
+        font-size: 2vh;
+      }
+      a {
+        text-decoration: none;
+      }
+      .link-table {
+        margin-top: 35vh;
+        margin-left: 5vw;
+        margin-right: 5vw;
+        width: 90%;
+        border-collapse: collapse;
+        border-radius: 10px;
+        color: #75777c;
+      }
+
+      .link-table th,
+      .link-table td {
+        border: none;
+        padding: 10px;
+        text-align: left;
+        color: #75777c;
+      }
+
+      .link-table th {
+        background-color: #0d1117;
+        color: #75777c;
+      }
+
+      .link-table tbody tr:nth-child(odd) {
+        background-color: #11151d;
+      }
+
+      .link-table tbody tr:nth-child(even) {
+        background-color: #11151d;
+      }
+      #head1 {
+        border-top-left-radius: 10px;
+      }
+      #head4 {
+        border-top-right-radius: 10px;
+      }
+
+      .link-table a {
+        color: #75777c;
+        text-decoration: none;
+      }
+
+      .link-table .copy-btn {
+        background: none;
+        border: none;
+        color: #3fa9f5;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+
+      .link-table .copy-btn:hover {
+        color: #75777c;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="display-txt">Shorten Your Loooong Links :)</h1>
+    <div class="search-box">
+      <form action="/shortenUrl" method="post">
+        <input
+          type="text"
+          id="longurl"
+          name="longurl"
+          placeholder="Enter the link"
+        />
+        <button class="btnSearch">Shorten Now!</button>
+      </form>
+    </div>
+
+    <div class="shorturl-box">
+      <a href="<%= shortid %>" class="cpy">
+        <div class="url-cont">
+          <% if (shortid) { %>
+          <a href="<%= shortid %>" target="_blank"><%= shortid %></a>
+          <% } else { %>
+          <span id="place">Short Url Appears Here!</span>
+          <% } %>
+        </div>
+      </a>
+      <button id="cpyBtn" class="btnSearch" onclick="copyToClipboard()">
+        Copy Link!
+      </button>
+    </div>
+
+    <table class="link-table">
+      <thead>
+        <tr>
+          <th id="head1">Short Link</th>
+          <th>Original Link</th>
+          <th>Clicks</th>
+          <th id="head4">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% urlData.forEach( url => { %>
+          <tr>
+              <td>
+                  <a href="https://<%=url.header %>/<%= url.shortUrl %>" target="_blank"><%=header %><%= url.shortUrl %></a>
+                  <button class="copy-btn" onclick="urlcpy('<%=header%><%=url.shortUrl%>')" ><i class="fa-regular fa-copy" style="color: #75777c;"></i></button>
+              </td>
+              <td><%= url.longUrl %></td>
+              <td><%= url.clicks %></td>
+              <td><%= url.date.toLocaleDateString('en-US',{
+                weekday: "short",
+                month : `short`,
+                day : '2-digit',
+                year : 'numeric'
+              }) %></td>
+          </tr>
+      <% }) %>
+      </tbody>
+    </table>
+    
+   <script>
+    function urlcpy(url){
+      navigator.clipboard.writeText(url).then(()=>{
+        alert("Url Copied")
+      }).catch((err) =>{
+        console.error("Failed to copy : ",err)
+      })
+    }
+   </script>
+    <script>
+      function copyToClipboard() {
+        const copyUrl = document.querySelector(".cpy");
+        const urlIs = copyUrl.href;
+
+        navigator.clipboard
+          .writeText(urlIs)
+          .then(() => {
+            alert("Url Copied");
+          })
+          .catch((err) => {
+            console.error("Failde to copy : ", err);
+          });
+      }
+    </script>
+  </body>
+</html>
